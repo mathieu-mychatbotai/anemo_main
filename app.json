@@ -41,23 +41,11 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ],
-      [
-        "expo-speech-recognition",
-        {
-          "microphonePermission": "Cette app a besoin du microphone pour enregistrer vos souvenirs.",
-          "speechRecognitionPermission": "Cette app utilise la reconnaissance vocale en français pour transcrire vos souvenirs."
-        }
       ]
     ],
     "experiments": {
       "typedRoutes": true
     },
-    "runtimeVersion": {
-      "policy": "sdkVersion"
-    }
-  }
-}
     "runtimeVersion": {
       "policy": "sdkVersion"
     }

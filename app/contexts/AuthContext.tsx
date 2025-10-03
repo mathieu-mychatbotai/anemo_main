@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '../services/supabase';
 
 interface User {
   id: string;
@@ -21,27 +22,81 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing session
     checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setUser({
+          id: session.user.id,
+          email: session.user.email!,
+          name: session.user.user_metadata?.name
+        });
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const checkAuth = async () => {
-    // TODO: Check Firebase auth state
-    setLoading(false);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUser({
+          id: session.user.id,
+          email: session.user.email!,
+          name: session.user.user_metadata?.name
+        });
+      }
+    } catch (error) {
+      console.error('Error checking auth:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const signIn = async (email: string, password: string) => {
-    // TODO: Implement Firebase sign in
-    setUser({ id: '1', email });
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) throw error;
+
+    if (data.user) {
+      setUser({
+        id: data.user.id,
+        email: data.user.email!,
+        name: data.user.user_metadata?.name
+      });
+    }
   };
 
   const signUp = async (email: string, password: string, name?: string) => {
-    // TODO: Implement Firebase sign up
-    setUser({ id: '1', email, name });
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          name
+        }
+      }
+    });
+
+    if (error) throw error;
+
+    if (data.user) {
+      setUser({
+        id: data.user.id,
+        email: data.user.email!,
+        name: data.user.user_metadata?.name
+      });
+    }
   };
 
   const signOut = async () => {
-    // TODO: Implement Firebase sign out
+    await supabase.auth.signOut();
     setUser(null);
   };
 
