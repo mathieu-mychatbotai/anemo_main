@@ -9,14 +9,22 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": false,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSSpeechRecognitionUsageDescription": "Anemo utilise la reconnaissance vocale en français pour transcrire vos souvenirs.",
+        "NSMicrophoneUsageDescription": "Anemo a besoin du microphone pour enregistrer vos souvenirs."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.INTERNET"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -33,11 +41,23 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "expo-speech-recognition",
+        {
+          "microphonePermission": "Cette app a besoin du microphone pour enregistrer vos souvenirs.",
+          "speechRecognitionPermission": "Cette app utilise la reconnaissance vocale en français pour transcrire vos souvenirs."
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true
     },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    }
+  }
+}
     "runtimeVersion": {
       "policy": "sdkVersion"
     }
